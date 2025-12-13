@@ -645,6 +645,55 @@
                 transition-duration: 0.01ms !important;
             }
         }
+        
+        /* 3D Game Section */
+        #game-container {
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 100%);
+            margin: 40px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: relative;
+        }
+        
+        #game-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .game-section {
+            margin-top: 60px;
+        }
+        
+        .game-info {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .game-info h3 {
+            color: #FF9671;
+            margin-bottom: 10px;
+        }
+        
+        .game-info p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .controls-info {
+            background: #f0f8ff;
+            border-left: 4px solid #FF9671;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -663,6 +712,76 @@
         </div>
     </section>
     
+    <!-- 3D Shooter Game Section -->
+    <div class="game-section">
+        <div class="container">
+            <h2 class="section-title">3D Shooter Game</h2>
+            <div id="game-container">
+                <canvas id="game-canvas"></canvas>
+            </div>
+            <div class="game-info">
+                <h3>Welcome to the 3D Shooter!</h3>
+                <p>Control your cartoon-style ship and explore the stylized 3D environment.</p>
+                <div class="controls-info">
+                    <strong>Controls:</strong><br>
+                    <strong>WASD</strong> or <strong>Arrow Keys</strong> - Move<br>
+                    <strong>Space</strong> - Jump<br>
+                    <strong>Mouse</strong> - Look around
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Link Cards -->
+    <div class="container">
+        <div class="links-container">
+            <!-- Pacman -->
+            <a href="https://passer-by.com/pacman/" class="link-card" target="_blank">
+                <img src="https://raw.githubusercontent.com/echocho-dev/games/main/pacman/cover.png" alt="Pacman" class="link-cover">
+                <h3 class="link-title">Pacman</h3>
+                <p class="link-description">Classic arcade game where you control a yellow character eating dots while avoiding colorful ghosts.</p>
+                <div class="link-url" style="display: none;">https://passer-by.com/pacman/</div>
+            </a>
+            
+            <!-- Tetris -->
+            <a href="https://chvin.github.io/react-tetris/?lan=zh" class="link-card" target="_blank">
+                <img src="https://raw.githubusercontent.com/echocho-dev/games/main/tetris/cover.png" alt="Tetris" class="link-cover">
+                <h3 class="link-title">Tetris</h3>
+                <p class="link-description">Classic puzzle game where you arrange falling blocks to create complete lines.</p>
+                <div class="link-url" style="display: none;">https://chvin.github.io/react-tetris/?lan=zh</div>
+            </a>
+            
+            <!-- Battle City -->
+            <a href="https://battle-city.js.org/#/" class="link-card" target="_blank">
+                <img src="https://raw.githubusercontent.com/echocho-dev/games/main/tank/cover.png" alt="Battle City" class="link-cover">
+                <h3 class="link-title">Battle City</h3>
+                <p class="link-description">Classic NES game remake where you control a tank to destroy enemies and protect your base.</p>
+                <div class="link-url" style="display: none;">https://battle-city.js.org/#/</div>
+            </a>
+            
+            <!-- Chess -->
+            <a href="https://lichess.org/" class="link-card" target="_blank">
+                <img src="https://raw.githubusercontent.com/echocho-dev/games/main/chess/cover.png" alt="Chess" class="link-cover">
+                <h3 class="link-title">Chess</h3>
+                <p class="link-description">Online chess platform where you can play against players worldwide and improve your skills.</p>
+                <div class="link-url" style="display: none;">https://lichess.org/</div>
+            </a>
+            
+            <!-- Star Battle -->
+            <a href="https://4ark.me/star-battle/" class="link-card" target="_blank">
+                <img src="https://raw.githubusercontent.com/echocho-dev/games/main/star-battle/cover.png" alt="Star Battle" class="link-cover">
+                <h3 class="link-title">Star Battle</h3>
+                <p class="link-description">Space shooter game where you control a spaceship to battle enemies in the galaxy.</p>
+                <div class="link-url" style="display: none;">https://4ark.me/star-battle/</div>
+            </a>
+            
+            <!-- Alien Invasion -->
+            <a href="http://cykod.github.io/AlienInvasion/" class="link-card" target="_blank">
+                <img src="https://raw.githubusercontent.com/echocho-dev/games/main/alien/cover.png" alt="Alien Invasion" class="link-cover">
+                <h3 class="link-title">Alien Invasion</h3>
+                <p class="link-description">Classic arcade game where you control a spaceship to shoot down alien invaders.</p>
+                <div class="link-url" style="display: none;">http://cykod.github.io/AlienInvasion/</div>
+            </a>
     <!-- Featured Section -->
     <section class="featured-section" id="featured">
         <div class="container">
@@ -1115,5 +1234,11 @@
             <p>© 2025 ECHOECHO Game Portal | All Rights Reserved | Curated with ❤️ for gamers worldwide</p>
         </div>
     </footer>
+    
+    <!-- Three.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- 3D Shooter Game Script -->
+    <script src="game.js"></script>
 </body>
 </html>
