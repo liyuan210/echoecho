@@ -157,6 +157,55 @@
             margin: 10px auto;
             border-radius: 3px;
         }
+        
+        /* 3D Game Section */
+        #game-container {
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 100%);
+            margin: 40px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: relative;
+        }
+        
+        #game-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .game-section {
+            margin-top: 60px;
+        }
+        
+        .game-info {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .game-info h3 {
+            color: #FF9671;
+            margin-bottom: 10px;
+        }
+        
+        .game-info p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .controls-info {
+            background: #f0f8ff;
+            border-left: 4px solid #FF9671;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -167,6 +216,26 @@
             <div class="welcome-text">Welcome to our game portal, where you can find all kinds of interesting games!</div>
         </div>
     </header>
+    
+    <!-- 3D Shooter Game Section -->
+    <div class="game-section">
+        <div class="container">
+            <h2 class="section-title">3D Shooter Game</h2>
+            <div id="game-container">
+                <canvas id="game-canvas"></canvas>
+            </div>
+            <div class="game-info">
+                <h3>Welcome to the 3D Shooter!</h3>
+                <p>Control your cartoon-style ship and explore the stylized 3D environment.</p>
+                <div class="controls-info">
+                    <strong>Controls:</strong><br>
+                    <strong>WASD</strong> or <strong>Arrow Keys</strong> - Move<br>
+                    <strong>Space</strong> - Jump<br>
+                    <strong>Mouse</strong> - Look around
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Link Cards -->
     <div class="container">
@@ -412,5 +481,11 @@
             <p>&copy; 2025 ECHOECHO Game Portal | All Rights Reserved</p>
         </div>
     </footer>
+    
+    <!-- Three.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- 3D Shooter Game Script -->
+    <script src="game.js"></script>
 </body>
 </html>
