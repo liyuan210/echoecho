@@ -5,12 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ECHOECHO - Game Portal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Arial', sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
         }
         
         body {
@@ -46,6 +51,149 @@
             font-size: 1.2rem;
             margin-bottom: 15px;
             letter-spacing: 1px;
+        }
+        
+        .nav-cta {
+            display: inline-block;
+            background: white;
+            color: #FF9671;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+        
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .hero-game-container {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-canvas-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 75%;
+            background: #1a1a2e;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        #gameCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        .webgl-fallback {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        
+        .webgl-fallback.show {
+            display: block;
+        }
+        
+        .hero-info {
+            color: white;
+        }
+        
+        .hero-info h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero-info p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+        
+        .hero-controls {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        .hero-controls h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #FFC75F;
+        }
+        
+        .hero-controls ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .hero-controls li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-controls li::before {
+            content: '▸';
+            margin-right: 10px;
+            color: #FFC75F;
+            font-weight: bold;
+        }
+        
+        .hero-cta {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF9671 0%, #FFC75F 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255,150,113,0.4);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,150,113,0.6);
         }
         
         /* Link Cards */
@@ -138,6 +286,32 @@
             .logo {
                 font-size: 2rem;
             }
+            
+            .hero-section {
+                padding: 30px 0;
+            }
+            
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .hero-info h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-info p {
+                font-size: 1rem;
+            }
+            
+            .hero-cta {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+            
+            .game-canvas-wrapper {
+                padding-bottom: 100%;
+            }
         }
         
         .section-title {
@@ -165,36 +339,48 @@
         <div class="container">
             <div class="logo">ECHOECHO</div>
             <div class="welcome-text">Welcome to our game portal, where you can find all kinds of interesting games!</div>
+            <a href="#hero-game" class="nav-cta">Play Now</a>
         </div>
     </header>
     
+    <!-- Hero Section -->
+    <section id="hero-game" class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-game-container">
+                    <div class="game-canvas-wrapper">
+                        <canvas id="gameCanvas"></canvas>
+                        <div class="webgl-fallback">
+                            <h3>WebGL Not Supported</h3>
+                            <p>Your browser doesn't support WebGL. Please try a modern browser like Chrome, Firefox, or Edge.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hero-info">
+                    <h2>Space Shooter</h2>
+                    <p>Experience the thrill of our exclusive 3D space shooter! Navigate through space, dodge asteroids, and blast your way to victory in this action-packed arcade adventure.</p>
+                    
+                    <div class="hero-controls">
+                        <h3>Controls</h3>
+                        <ul>
+                            <li>Mouse Movement - Aim your ship</li>
+                            <li>Click/Tap - Fire laser</li>
+                            <li>Arrow Keys - Move ship</li>
+                            <li>Space - Special weapon</li>
+                        </ul>
+                    </div>
+                    
+                    <a href="#hero-game" class="hero-cta">Start Playing</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
     <!-- Link Cards -->
     <div class="container">
+        <h2 class="section-title">Classic Arcade Games</h2>
         <div class="links-container">
-            <!-- Pacman -->
-            <a href="https://passer-by.com/pacman/" class="link-card" target="_blank">
-                <img src="https://raw.githubusercontent.com/echocho-dev/games/main/pacman/cover.png" alt="Pacman" class="link-cover">
-                <h3 class="link-title">Pacman</h3>
-                <p class="link-description">Classic arcade game where you control a yellow character eating dots while avoiding colorful ghosts.</p>
-                <div class="link-url" style="display: none;">https://passer-by.com/pacman/</div>
-            </a>
-            
-            <!-- Tetris -->
-            <a href="https://chvin.github.io/react-tetris/?lan=zh" class="link-card" target="_blank">
-                <img src="https://raw.githubusercontent.com/echocho-dev/games/main/tetris/cover.png" alt="Tetris" class="link-cover">
-                <h3 class="link-title">Tetris</h3>
-                <p class="link-description">Classic puzzle game where you arrange falling blocks to create complete lines.</p>
-                <div class="link-url" style="display: none;">https://chvin.github.io/react-tetris/?lan=zh</div>
-            </a>
-            
-            <!-- Battle City -->
-            <a href="https://battle-city.js.org/#/" class="link-card" target="_blank">
-                <img src="https://raw.githubusercontent.com/echocho-dev/games/main/tank/cover.png" alt="Battle City" class="link-cover">
-                <h3 class="link-title">Battle City</h3>
-                <p class="link-description">Classic NES game remake where you control a tank to destroy enemies and protect your base.</p>
-                <div class="link-url" style="display: none;">https://battle-city.js.org/#/</div>
-            </a>
-            
             <!-- Chess -->
             <a href="https://lichess.org/" class="link-card" target="_blank">
                 <img src="https://raw.githubusercontent.com/echocho-dev/games/main/chess/cover.png" alt="Chess" class="link-cover">
@@ -412,5 +598,266 @@
             <p>&copy; 2025 ECHOECHO Game Portal | All Rights Reserved</p>
         </div>
     </footer>
+    
+    <script>
+        (function() {
+            const canvas = document.getElementById('gameCanvas');
+            const fallbackMsg = document.querySelector('.webgl-fallback');
+            
+            if (!canvas.getContext('webgl') && !canvas.getContext('experimental-webgl')) {
+                fallbackMsg.classList.add('show');
+                return;
+            }
+            
+            let scene, camera, renderer, ship, asteroids = [], lasers = [];
+            let mouseX = 0, mouseY = 0;
+            let keys = {};
+            
+            function init() {
+                scene = new THREE.Scene();
+                scene.fog = new THREE.Fog(0x0a0a1e, 10, 50);
+                
+                const canvasWrapper = canvas.parentElement;
+                const width = canvasWrapper.offsetWidth;
+                const height = canvasWrapper.offsetHeight;
+                
+                camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+                camera.position.z = 15;
+                camera.position.y = 3;
+                camera.lookAt(0, 0, 0);
+                
+                renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+                renderer.setSize(width, height);
+                renderer.setClearColor(0x0a0a1e);
+                
+                const ambientLight = new THREE.AmbientLight(0x404040, 2);
+                scene.add(ambientLight);
+                
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+                directionalLight.position.set(5, 10, 5);
+                scene.add(directionalLight);
+                
+                const pointLight = new THREE.PointLight(0x00ffff, 1, 100);
+                pointLight.position.set(0, 5, 10);
+                scene.add(pointLight);
+                
+                const shipGeometry = new THREE.ConeGeometry(0.5, 2, 4);
+                const shipMaterial = new THREE.MeshPhongMaterial({ 
+                    color: 0xff6b35,
+                    emissive: 0xff4500,
+                    emissiveIntensity: 0.3,
+                    shininess: 100
+                });
+                ship = new THREE.Mesh(shipGeometry, shipMaterial);
+                ship.rotation.x = Math.PI / 2;
+                ship.position.y = -2;
+                scene.add(ship);
+                
+                for (let i = 0; i < 15; i++) {
+                    createAsteroid();
+                }
+                
+                const starGeometry = new THREE.BufferGeometry();
+                const starVertices = [];
+                for (let i = 0; i < 1000; i++) {
+                    const x = (Math.random() - 0.5) * 100;
+                    const y = (Math.random() - 0.5) * 100;
+                    const z = (Math.random() - 0.5) * 100;
+                    starVertices.push(x, y, z);
+                }
+                starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+                const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1 });
+                const stars = new THREE.Points(starGeometry, starMaterial);
+                scene.add(stars);
+                
+                window.addEventListener('resize', onWindowResize);
+                canvas.addEventListener('mousemove', onMouseMove);
+                canvas.addEventListener('click', fireLaser);
+                canvas.addEventListener('touchstart', onTouchStart);
+                canvas.addEventListener('touchmove', onTouchMove);
+                document.addEventListener('keydown', onKeyDown);
+                document.addEventListener('keyup', onKeyUp);
+                
+                animate();
+            }
+            
+            function createAsteroid() {
+                const geometry = new THREE.DodecahedronGeometry(Math.random() * 0.5 + 0.3, 0);
+                const material = new THREE.MeshPhongMaterial({ 
+                    color: Math.random() * 0xffffff,
+                    flatShading: true
+                });
+                const asteroid = new THREE.Mesh(geometry, material);
+                
+                asteroid.position.set(
+                    (Math.random() - 0.5) * 20,
+                    (Math.random() - 0.5) * 10,
+                    -Math.random() * 30 - 10
+                );
+                
+                asteroid.rotation.set(
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI
+                );
+                
+                asteroid.userData.rotationSpeed = {
+                    x: (Math.random() - 0.5) * 0.02,
+                    y: (Math.random() - 0.5) * 0.02,
+                    z: (Math.random() - 0.5) * 0.02
+                };
+                
+                asteroid.userData.speed = Math.random() * 0.02 + 0.01;
+                
+                scene.add(asteroid);
+                asteroids.push(asteroid);
+            }
+            
+            function fireLaser() {
+                const laserGeometry = new THREE.CylinderGeometry(0.05, 0.05, 1, 8);
+                const laserMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0x00ffff,
+                    emissive: 0x00ffff,
+                    emissiveIntensity: 1
+                });
+                const laser = new THREE.Mesh(laserGeometry, laserMaterial);
+                
+                laser.position.copy(ship.position);
+                laser.position.z -= 1;
+                laser.rotation.x = Math.PI / 2;
+                
+                const glowGeometry = new THREE.SphereGeometry(0.15, 8, 8);
+                const glowMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0x00ffff,
+                    transparent: true,
+                    opacity: 0.6
+                });
+                const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+                laser.add(glow);
+                
+                scene.add(laser);
+                lasers.push(laser);
+            }
+            
+            function onMouseMove(event) {
+                const rect = canvas.getBoundingClientRect();
+                mouseX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+                mouseY = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+            }
+            
+            function onTouchStart(event) {
+                event.preventDefault();
+                if (event.touches.length > 0) {
+                    const touch = event.touches[0];
+                    const rect = canvas.getBoundingClientRect();
+                    mouseX = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+                    mouseY = -((touch.clientY - rect.top) / rect.height) * 2 + 1;
+                    fireLaser();
+                }
+            }
+            
+            function onTouchMove(event) {
+                event.preventDefault();
+                if (event.touches.length > 0) {
+                    const touch = event.touches[0];
+                    const rect = canvas.getBoundingClientRect();
+                    mouseX = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+                    mouseY = -((touch.clientY - rect.top) / rect.height) * 2 + 1;
+                }
+            }
+            
+            function onKeyDown(event) {
+                keys[event.key] = true;
+                if (event.key === ' ') {
+                    event.preventDefault();
+                    fireLaser();
+                }
+            }
+            
+            function onKeyUp(event) {
+                keys[event.key] = false;
+            }
+            
+            function onWindowResize() {
+                const canvasWrapper = canvas.parentElement;
+                const width = canvasWrapper.offsetWidth;
+                const height = canvasWrapper.offsetHeight;
+                
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+                renderer.setSize(width, height);
+            }
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                const targetX = mouseX * 8;
+                const targetY = mouseY * 4;
+                ship.position.x += (targetX - ship.position.x) * 0.1;
+                ship.position.y += (targetY - ship.position.y) * 0.1;
+                
+                if (keys['ArrowLeft']) ship.position.x -= 0.2;
+                if (keys['ArrowRight']) ship.position.x += 0.2;
+                if (keys['ArrowUp']) ship.position.y += 0.2;
+                if (keys['ArrowDown']) ship.position.y -= 0.2;
+                
+                ship.position.x = Math.max(-8, Math.min(8, ship.position.x));
+                ship.position.y = Math.max(-4, Math.min(4, ship.position.y));
+                
+                ship.rotation.z = -ship.position.x * 0.1;
+                ship.rotation.y = Math.PI;
+                
+                for (let i = asteroids.length - 1; i >= 0; i--) {
+                    const asteroid = asteroids[i];
+                    asteroid.position.z += asteroid.userData.speed;
+                    
+                    asteroid.rotation.x += asteroid.userData.rotationSpeed.x;
+                    asteroid.rotation.y += asteroid.userData.rotationSpeed.y;
+                    asteroid.rotation.z += asteroid.userData.rotationSpeed.z;
+                    
+                    if (asteroid.position.z > 15) {
+                        scene.remove(asteroid);
+                        asteroids.splice(i, 1);
+                        createAsteroid();
+                    }
+                }
+                
+                for (let i = lasers.length - 1; i >= 0; i--) {
+                    const laser = lasers[i];
+                    laser.position.z -= 0.5;
+                    
+                    if (laser.position.z < -50) {
+                        scene.remove(laser);
+                        lasers.splice(i, 1);
+                        continue;
+                    }
+                    
+                    for (let j = asteroids.length - 1; j >= 0; j--) {
+                        const asteroid = asteroids[j];
+                        const distance = laser.position.distanceTo(asteroid.position);
+                        
+                        if (distance < 1) {
+                            scene.remove(laser);
+                            lasers.splice(i, 1);
+                            scene.remove(asteroid);
+                            asteroids.splice(j, 1);
+                            createAsteroid();
+                            break;
+                        }
+                    }
+                }
+                
+                renderer.render(scene, camera);
+            }
+            
+            if (typeof THREE !== 'undefined') {
+                init();
+            } else {
+                fallbackMsg.classList.add('show');
+                fallbackMsg.querySelector('h3').textContent = 'Loading Error';
+                fallbackMsg.querySelector('p').textContent = 'Failed to load 3D engine. Please refresh the page.';
+            }
+        })();
+    </script>
 </body>
 </html>
